@@ -1,10 +1,12 @@
 import Todo from "./Todo"
 
 const TodoList = ({todos, toggleTodo}) => {
-    return(
-        todos.map((todo) => {
-            <Todo key={todo.id} todo={todo} toggleTodo={toggleTodo}/>
-        })
+    return (
+        <div>
+            {todos.map ( (t) => {
+                return <Todo key={t.id} todo={t} toggleTodo={toggleTodo}/>
+            })}
+        </div>
     )
 }
 
