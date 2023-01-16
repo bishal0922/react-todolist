@@ -10,9 +10,9 @@ const App = () => {
 
   //useState
   const [todos, setTodos] = useState([
-    {id: 1, name: "Learn React", completed: false},
-    {id: 2, name: "Learn Firebase", completed: true},
-    {id: 3, name: "Learn GraphQL", completed: false},
+    // {id: 1, name: "Learn React", completed: false},
+    // {id: 2, name: "Learn Firebase", completed: true},
+    // {id: 3, name: "Learn GraphQL", completed: false},
   ])
 
   //useEffect
@@ -41,12 +41,11 @@ const App = () => {
     if (name === '') return
 
     //else add to Todo array
-    const newTodo = {id: uuid(), task: name, completed: false}
+    const newTodo = {id: uuid(), name: name, completed: false}
 
     setTodos( prevTodos => {
       return [...prevTodos, newTodo]
     })
-
 
     todoNameRef.current.value = null
   }
