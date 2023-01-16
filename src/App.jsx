@@ -1,28 +1,31 @@
-import { useState, useRef, useEffect } from 'react'
-import TodoList from './pages/TodoList'
-import {uuid} from 'uuidv4'
+import { useState, useRef, useEffect } from "react";
+import uuid from 'react-uuid';
+import TodoList from "./pages/TodoList";
 
 const LOCAL_STORAGE_KEY = 'todoApp.todos'
 
-function App() {
-  const [todos, setTodos] = useState([
-    {id: 1, name: "Learn React", completed: false},
-    {id: 2, name: "Learn Firebase", completed: false},
-    {id: 3, name: "Learn GraphQL", completed: false},
-  ])
+const App = () => {
+  //useRef
   const todoNameRef = useRef()
 
-  // storing todos in local storage
+  //useState
+  const [todos, setTodos] = useState([
+    {id: 1, name: "Learn React", completed: false},
+    {id: 2, name: "Learn Firebase", completed: true},
+    {id: 3, name: "Learn GraphQL", completed: false},
+  ])
+
+  //useEffect
   useEffect(() => {
     const storedTodos = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
     if (storedTodos) setTodos(storedTodos)
   }, [])
 
-  // saving todos in local storage
   useEffect(() => {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todos))
   }, [todos])
 
+  //toggleTodo receives the id from TodoList -> "Todo"
   const toggleTodo = (id) => {
     const newTodos = [...todos]
     const todo = newTodos.find(todo => todo.id === id)
@@ -30,30 +33,39 @@ function App() {
     setTodos(newTodos)
   }
 
-
+  //add a new todo to the array
   const handleAddTodo = () => {
     const name = todoNameRef.current.value
+
+    //if the todo is empty return
     if (name === '') return
-    setTodos(prevTodos => {
-      return [...prevTodos, {id: uuid(), task: name, completed: false}]
+
+    //else add to Todo array
+    const newTodo = {id: uuid(), task: name, completed: false}
+
+    setTodos( prevTodos => {
+      return [...prevTodos, newTodo]
     })
-    todoNameRef.current.value = null // clear the input
+
+
+    todoNameRef.current.value = null
   }
 
-  const handleClearTodos = () => {
+  const handleClearTodo = () => {
+    //if the todo is "completed"/ TRUE then !todo.completed = false, hence not kept in the new array
     const newTodos = todos.filter(todo => !todo.completed)
     setTodos(newTodos)
   }
 
   return (
     <>
-    <TodoList todos={tasks} toggleTodo={toggleTodo}/>
-    <input ref={todoNameRef} type="text"/>
-    <button onClick={handleAddTodo}>Clear Complete</button>
-    <button onClick={handleClearTodos}>Clear Complete</button>
-    <div>{todos.filter(todo => !todo.complete).length} left to do</div>
+      <TodoList todos={todos} toggleTodo={toggleTodo}/>
+      <input type="text" ref={todoNameRef}/>
+      <button onClick={handleAddTodo}>Add Todo</button>
+      <button onClick={handleClearTodo}>Clear Todo</button>
+      <div>{todos.filter(todo => !todo.complete).length} left to do</div>
     </>
   )
 }
 
-export default App
+export default App;
